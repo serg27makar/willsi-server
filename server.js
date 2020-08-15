@@ -21,22 +21,13 @@ app.use((request,response,next)=>{
         next();
         return
     }
-    const collection = request.app.locals.collection;
     let cookies = request.headers;
-    if(!cookies.token){
+    if (cookies.token && cookies.token.length === 24) {
+        next();
+    } else {
         response.sendStatus(401);
         response.end();
-        return
     }
-    collection.findOne(ObjectId(cookies.token),function (err,res) {
-        if (res) {
-            response.send(res);
-            next()
-        }else {
-            response.sendStatus(401);
-            response.end();
-        }
-    });
 });
 
 mongoClient.connect(function(err, client){
