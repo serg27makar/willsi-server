@@ -6,7 +6,6 @@ const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017/";
 const mongoClient = new MongoClient(url, { useNewUrlParser: true });
-const ObjectId = require("mongodb").ObjectId;
 const server = http.createServer(app);
 
 let dbClient;
@@ -40,7 +39,8 @@ mongoClient.connect(function(err, client){
 });
 
 const route_names = [
-    'users'
+    'users',
+    'store',
 ];
 
 route_names.forEach(route_name => {

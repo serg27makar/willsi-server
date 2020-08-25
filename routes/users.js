@@ -16,7 +16,7 @@ router.post('/login', async (req, res, next) => {
             res.send('find:0');
             res.end();
         } else {
-            const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission} = result;
+            const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore} = result;
             const data = {
                 UserID: _id,
                 UserName,
@@ -25,6 +25,7 @@ router.post('/login', async (req, res, next) => {
                 Phone,
                 UsersParameters,
                 Permission,
+                UserStore,
             };
             res.send(data);
             res.end();
@@ -44,24 +45,20 @@ router.post("/register", function (req, res) {
                 collection.insertOne(user, function (err, response) {
                     if (err) return console.log(err);
                     res.send(response);
-                    res.end()
-
+                    res.end();
                 });
             } else {
                 res.send('find:1');
-                res.end()
-
+                res.end();
             }
         });
     } else {
         collection.insertOne(user, function (err, response) {
             if (err) return console.log(err);
             res.send(response);
-            res.end()
-
+            res.end();
         });
     }
-
 });
 
 router.post("/update", function (req, res) {
@@ -84,7 +81,7 @@ router.get("/getUserData", function (req, res) {
     let cookies = req.headers;
     const collection = req.app.locals.collection;
     collection.findOne(ObjectId(cookies.token),function (err, result) {
-        const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission} = result;
+        const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore} = result;
         const data = {
             UserID: _id,
             UserName,
@@ -92,7 +89,8 @@ router.get("/getUserData", function (req, res) {
             PublicAuth,
             Phone,
             UsersParameters,
-            Permission
+            Permission,
+            UserStore,
         };
         if (res) {
             res.send(data);
