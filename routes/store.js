@@ -1,8 +1,5 @@
-const db = require("../modules/database");
-
 const express = require('express');
 const router = express.Router();
-const ObjectId = require("mongodb").ObjectId;
 module.exports = router ;
 
 router.post("/register", function (req, res) {
@@ -16,7 +13,7 @@ router.post("/register", function (req, res) {
         phoneStore,
         secondUrlStore,
         addressStore,
-    }
+    };
     const collection = req.app.locals.collection;
     collection.insertOne(store, function (err, response) {
         if (err) return console.log(err);
