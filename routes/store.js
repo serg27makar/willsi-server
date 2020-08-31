@@ -23,3 +23,17 @@ router.post("/register", function (req, res) {
     });
 
 });
+
+router.get("/getStoreData", function (req, res) {
+    let cookies = req.headers;
+    const collection = req.app.locals.collection;
+    collection.find({adminID: cookies.token}).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
