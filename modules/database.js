@@ -9,3 +9,17 @@ module.exports.User = function(body) {
     if (UserStore) user = {...user, UserStore};
     return user;
 };
+
+module.exports.Store = function(body) {
+    const {adminID, nameStore, urlStore, textStore, phoneStore, secondUrlStore, addressStore, StoreID} = body;
+    let store = {};
+    if (adminID) store = {...store, adminID};
+    if (nameStore) store = {...store, nameStore};
+    if (urlStore) store = {...store, urlStore};
+    if (textStore) store = {...store, textStore};
+    if (phoneStore) store = {...store, phoneStore};
+    if (secondUrlStore) store = {...store, secondUrlStore};
+    if (addressStore) store = {...store, addressStore};
+    if (StoreID) store = {...store, StoreID};
+    return store;
+};

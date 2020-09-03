@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const ObjectId = require("mongodb").ObjectId;
+const db = require("../modules/database");
 module.exports = router ;
 
 router.post("/register", function (req, res) {
@@ -36,4 +38,35 @@ router.get("/getStoreData", function (req, res) {
             res.end();
         }
     });
+});
+
+router.post("/remove", function (req, res) {
+    let cookies = req.headers;
+    const collection = req.app.locals.collection;
+    const { StoreID } = req.body;
+    collection.remove({_id: ObjectId(StoreID)}, function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
+
+router.post("/update", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { StoreID } = req.body;
+    const collection = req.app.locals.collection;
+    const store = db.Store(req.body);
+    collection.updateOne({_id: ObjectId(StoreID)}, {$set: store}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
 });
