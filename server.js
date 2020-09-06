@@ -41,6 +41,7 @@ mongoClient.connect(function(err, client){
 const route_names = [
     'users',
     'store',
+    'product'
 ];
 
 route_names.forEach(route_name => {
