@@ -33,6 +33,8 @@ mongoClient.connect(function(err, client){
     if (err) return console.log(err);
     dbClient = client;
     app.locals.collection = client.db("usersDb").collection("usersDb");
+    app.locals.products = client.db("storeDb").collection("productsDb");
+    app.locals.store = client.db("storeDb").collection("storeDb");
     server.listen(3001, function(){
         console.log("Сервер ожидает подключения...");
     });

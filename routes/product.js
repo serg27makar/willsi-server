@@ -11,3 +11,36 @@ router.post("/added", function (req, res) {
         res.end()
     });
 });
+
+router.get("/getProductData", function (req, res) {
+    const collection = req.app.locals.collection;
+    collection.find().toArray(function (err, result) {
+        if (res) {
+            const products = [];
+            result.forEach((obj) => {
+                if (obj.ProductStoreID) {
+                    products.push(obj)
+                }
+            });
+            res.send(products);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
+
+router.post("/getProductDataToId", function (req, res) {
+    const {ProductStoreID} = req.body;
+    const collection = req.app.locals.collection;
+    collection.find({ProductStoreID}).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
