@@ -4,7 +4,7 @@ module.exports = router ;
 
 router.post("/added", function (req, res) {
     if (!req.body) return res.sendStatus(400);
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.products;
     collection.insertOne(req.body, function (err, response) {
         if (err) return console.log(err);
         res.send(response);
@@ -13,7 +13,7 @@ router.post("/added", function (req, res) {
 });
 
 router.get("/getProductData", function (req, res) {
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.products;
     collection.find().toArray(function (err, result) {
         if (res) {
             const products = [];
@@ -33,7 +33,7 @@ router.get("/getProductData", function (req, res) {
 
 router.post("/getProductDataToId", function (req, res) {
     const {ProductStoreID} = req.body;
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.products;
     collection.find({ProductStoreID}).toArray(function (err, result) {
         if (res) {
             res.send(result);

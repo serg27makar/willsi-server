@@ -16,7 +16,7 @@ router.post("/register", function (req, res) {
         secondUrlStore,
         addressStore,
     };
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.store;
     collection.insertOne(store, function (err, response) {
         if (err) return console.log(err);
         res.send(response);
@@ -28,7 +28,7 @@ router.post("/register", function (req, res) {
 
 router.get("/getStoreData", function (req, res) {
     let cookies = req.headers;
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.store;
     collection.find({adminID: cookies.token}).toArray(function (err, result) {
         if (res) {
             res.send(result);
@@ -42,7 +42,7 @@ router.get("/getStoreData", function (req, res) {
 
 router.post("/remove", function (req, res) {
     let cookies = req.headers;
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.store;
     const { StoreID } = req.body;
     collection.remove({_id: ObjectId(StoreID)}, function (err, result) {
         if (res) {
@@ -58,7 +58,7 @@ router.post("/remove", function (req, res) {
 router.post("/update", function (req, res) {
     if (!req.body) return res.sendStatus(400);
     const { StoreID } = req.body;
-    const collection = req.app.locals.collection;
+    const collection = req.app.locals.store;
     const store = db.Store(req.body);
     collection.updateOne({_id: ObjectId(StoreID)}, {$set: store}, function (err, result) {
         if (err) return console.log(err);
