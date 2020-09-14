@@ -1,3 +1,4 @@
+const db = require("../modules/database");
 const express = require('express');
 const router = express.Router();
 module.exports = router ;
@@ -16,13 +17,7 @@ router.get("/getProductData", function (req, res) {
     const collection = req.app.locals.products;
     collection.find().toArray(function (err, result) {
         if (res) {
-            const products = [];
-            result.forEach((obj) => {
-                if (obj.ProductStoreID) {
-                    products.push(obj)
-                }
-            });
-            res.send(products);
+            res.send(result);
             res.end();
         } else {
             res.sendStatus(401);
@@ -44,3 +39,26 @@ router.post("/getProductDataToId", function (req, res) {
         }
     });
 });
+
+router.post("/getProductDataToParams", function (req, res) {
+    const collection = req.app.locals.products;
+    const {skip} = req.body;
+    const product = db.Product(req.body);
+    collection.find(product).skip(skip || 0).limit(12).toArray(function (err, result) {
+        if (res) {
+            const products = [];
+            result.forEach((obj) => {
+                if (obj.ProductStoreID) {
+                    products.push(obj)
+                }
+            });
+            res.send(products);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
+
+

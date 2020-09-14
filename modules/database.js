@@ -23,3 +23,12 @@ module.exports.Store = function(body) {
     if (StoreID) store = {...store, StoreID};
     return store;
 };
+
+module.exports.Product = function(body) {
+    const {topCatalog, subCatalog, size, parameters} = body;
+    let product = {};
+    if (parameters) product = {...product, parameters};
+    if (topCatalog) product = {...product, topCatalog};
+    if (subCatalog) product = {...product, subCatalog};
+    return product;
+};
