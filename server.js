@@ -35,6 +35,7 @@ mongoClient.connect(function(err, client){
     app.locals.collection = client.db("willsiDb").collection("usersDb");
     app.locals.products = client.db("willsiDb").collection("productsDb");
     app.locals.store = client.db("willsiDb").collection("storeDb");
+    app.locals.parameters = client.db("willsiDb").collection("parametersDb");
     server.listen(3001, function(){
         console.log("Сервер ожидает подключения...");
     });
@@ -43,7 +44,8 @@ mongoClient.connect(function(err, client){
 const route_names = [
     'users',
     'store',
-    'product'
+    'product',
+    'parameter'
 ];
 
 route_names.forEach(route_name => {
