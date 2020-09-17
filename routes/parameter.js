@@ -11,3 +11,18 @@ router.post("/added", function (req, res) {
         res.end()
     });
 });
+
+
+router.post("/getParametersToId", function (req, res) {
+    const {ProductID} = req.body;
+    const collection = req.app.locals.parameters;
+    collection.find({ProductID}).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});

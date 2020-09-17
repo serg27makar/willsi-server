@@ -1,3 +1,8 @@
+const pp = require("../modules/productsParameters");
+const express = require('express');
+const router = express.Router();
+module.exports = router ;
+
 module.exports.User = function(body) {
     const { UserName, Email, UsersParameters, Permission, Password, UserStore } = body;
     let user = {};
@@ -31,4 +36,33 @@ module.exports.Product = function(body) {
     if (topCatalog) product = {...product, topCatalog};
     if (subCatalog) product = {...product, subCatalog};
     return product;
+};
+
+module.exports.getParametersToId = async function (collection, ProductId) {
+    collection.find().toArray(function (err, result) {
+       return result;
+    });
+};
+
+module.exports.getProductDataToParams = async function (collection, product, parameters, skip, fatBack) {
+    const fullProduct = [];
+    function returnData(item, length, index) {
+        fullProduct.push(item);
+        if(length === index + 1) {
+            return fatBack(fullProduct);
+        }
+    }
+    collection.find(product).skip(skip || 0).limit(12).toArray(function (err, res) {
+        res.map((obj, index) => {
+            function foo(item) {
+                const Parameters = item;
+                obj = {...obj, Parameters};
+                returnData(obj, res.length, index);
+            }
+            pp.getParametersToId(parameters, obj._id, (result) => {
+                foo(result);
+            });
+        });
+
+    });
 };

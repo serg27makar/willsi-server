@@ -40,25 +40,27 @@ router.post("/getProductDataToId", function (req, res) {
     });
 });
 
-router.post("/getProductDataToParams", function (req, res) {
+router.post("/getProductDataToParams", async function (req, res) {
     const collection = req.app.locals.products;
+    const parameters = req.app.locals.parameters;
     const {skip} = req.body;
     const product = db.Product(req.body);
-    collection.find(product).skip(skip || 0).limit(12).toArray(function (err, result) {
+    try {
         if (res) {
-            const products = [];
-            result.forEach((obj) => {
-                if (obj.ProductStoreID) {
-                    products.push(obj)
-                }
+            await db.getProductDataToParams(collection, product, parameters, skip, (products) => {
+                console.log("products", products);
+                res.send(products);
+                res.end();
             });
-            res.send(products);
-            res.end();
         } else {
             res.sendStatus(401);
             res.end();
         }
-    });
+    } catch (e) {
+        res.send(e);
+        res.end();
+    }
+
 });
 
 
