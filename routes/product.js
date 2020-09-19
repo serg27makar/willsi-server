@@ -40,15 +40,15 @@ router.post("/getProductDataToId", function (req, res) {
     });
 });
 
-router.post("/getProductDataToParams", async function (req, res) {
+router.post("/getProductDataToParams", function (req, res) {
     const collection = req.app.locals.products;
     const parameters = req.app.locals.parameters;
     const {skip} = req.body;
     const product = db.Product(req.body);
+    const searchParams =  db.SearchParams(req.body);
     try {
         if (res) {
-            await db.getProductDataToParams(collection, product, parameters, skip, (products) => {
-                console.log("products", products);
+            db.getProductDataToParams(collection, product, searchParams, parameters, skip, (products) => {
                 res.send(products);
                 res.end();
             });

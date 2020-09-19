@@ -30,11 +30,27 @@ module.exports.Store = function(body) {
 };
 
 module.exports.Product = function(body) {
-    const {topCatalog, subCatalog, size, parameters} = body;
+    const {topCatalog, subCatalog} = body;
     let product = {};
-    if (parameters) product = {...product, parameters};
     if (topCatalog) product = {...product, topCatalog};
     if (subCatalog) product = {...product, subCatalog};
+    return product;
+};
+
+module.exports.SearchParams = function(body) {
+    const {growth, shoulders, chest, waist, hips, leg, climb, head} = body.SearchParams;
+    let size = {};
+    if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+    if (shoulders) size = {...size, "size.shoulders": {$gte : Number(shoulders)}};
+    if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
+    if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+    if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+    if (leg) size = {...size, "size.leg": {$gte : Number(leg)}};
+    if (climb) size = {...size, "size.climb": {$gte : Number(climb)}};
+    if (head) size = {...size, "size.head": {$gte : Number(head)}};
+
+    let product = {};
+    if (size) product = {...product, size};
     return product;
 };
 
@@ -44,7 +60,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = async function (collection, product, parameters, skip, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, skip, fatBack) {
     const fullProduct = [];
     function returnData(item, length, index) {
         fullProduct.push(item);
@@ -53,16 +69,22 @@ module.exports.getProductDataToParams = async function (collection, product, par
         }
     }
     collection.find(product).skip(skip || 0).limit(12).toArray(function (err, res) {
-        res.map((obj, index) => {
-            function foo(item) {
-                const Parameters = item;
-                obj = {...obj, Parameters};
-                returnData(obj, res.length, index);
-            }
-            pp.getParametersToId(parameters, obj._id, (result) => {
-                foo(result);
+        if (res.length > 0) {
+            res.map((obj, index) => {
+                function foo(item) {
+                    if (item && item.length > 0) {
+                        const Parameters = item;
+                        obj = {...obj, Parameters};
+                        returnData(obj, res.length, index);
+                    }
+                }
+                pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {
+                    foo(result);
+                });
             });
-        });
+        } else {
+            return fatBack(fullProduct);
+        }
 
     });
 };
