@@ -15,7 +15,7 @@ router.post('/login', async (req, res, next) => {
             res.send('find:0');
             res.end();
         } else {
-            const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore} = result;
+            const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore, Postpone} = result;
             const data = {
                 UserID: _id,
                 UserName,
@@ -25,6 +25,7 @@ router.post('/login', async (req, res, next) => {
                 UsersParameters,
                 Permission,
                 UserStore,
+                Postpone,
             };
             res.send(data);
             res.end();
@@ -80,7 +81,7 @@ router.get("/getUserData", function (req, res) {
     let cookies = req.headers;
     const collection = req.app.locals.collection;
     collection.findOne(ObjectId(cookies.token),function (err, result) {
-        const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore} = result;
+        const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore, Postpone} = result;
         const data = {
             UserID: _id,
             UserName,
@@ -90,6 +91,7 @@ router.get("/getUserData", function (req, res) {
             UsersParameters,
             Permission,
             UserStore,
+            Postpone,
         };
         if (res) {
             res.send(data);

@@ -4,7 +4,7 @@ const router = express.Router();
 module.exports = router ;
 
 module.exports.User = function(body) {
-    const { UserName, Email, UsersParameters, Permission, Password, UserStore } = body;
+    const { UserName, Email, UsersParameters, Permission, Password, UserStore, Postpone } = body;
     let user = {};
     if (UsersParameters) user = {...user, UsersParameters};
     if (Email) user = {...user, Email};
@@ -12,6 +12,7 @@ module.exports.User = function(body) {
     if (Password) user = {...user, Password};
     if (Permission) user = {...user, Permission};
     if (UserStore) user = {...user, UserStore};
+    if (Postpone) user = {...user, Postpone};
     return user;
 };
 
