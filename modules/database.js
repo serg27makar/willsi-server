@@ -38,18 +38,20 @@ module.exports.Product = function(body) {
 };
 
 module.exports.SearchParams = function(body) {
-    const {growth, shoulders, chest, waist, hips, leg, climb, head} = body.SearchParams;
-    let size = {};
-    if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
-    if (shoulders) size = {...size, "size.shoulders": {$gte : Number(shoulders)}};
-    if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
-    if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
-    if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
-    if (leg) size = {...size, "size.leg": {$gte : Number(leg)}};
-    if (climb) size = {...size, "size.climb": {$gte : Number(climb)}};
-    if (head) size = {...size, "size.head": {$gte : Number(head)}};
-
     let product = {};
+    let size = {};
+    if (body.SearchParams) {
+        const {growth, shoulders, chest, waist, hips, leg, climb, head} = body.SearchParams;
+
+        if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+        if (shoulders) size = {...size, "size.shoulders": {$gte : Number(shoulders)}};
+        if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
+        if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+        if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+        if (leg) size = {...size, "size.leg": {$gte : Number(leg)}};
+        if (climb) size = {...size, "size.climb": {$gte : Number(climb)}};
+        if (head) size = {...size, "size.head": {$gte : Number(head)}};
+    }
     if (size) product = {...product, size};
     return product;
 };
