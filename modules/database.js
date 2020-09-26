@@ -42,16 +42,63 @@ module.exports.SearchParams = function(body) {
     let product = {};
     let size = {};
     if (body.SearchParams) {
-        const {growth, shoulders, chest, waist, hips, leg, climb, head} = body.SearchParams;
+        const {growth, shoulder, chest, waist, hips, thighGirth,
+            palmGirth, headCircumference, armGirth, fingerLength,
+            waistAtNavelLevel, insideLegLength, footLength, wideFootGirth,
+            footCircumference, neckGirth, frontPawsLength, chestGirth, growthDog,
+            waistDog, hindFeetLength, legLength, legWidth, legCircumference} = body.SearchParams;
 
-        if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
-        if (shoulders) size = {...size, "size.shoulders": {$gte : Number(shoulders)}};
-        if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
-        if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
-        if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
-        if (leg) size = {...size, "size.leg": {$gte : Number(leg)}};
-        if (climb) size = {...size, "size.climb": {$gte : Number(climb)}};
-        if (head) size = {...size, "size.head": {$gte : Number(head)}};
+        if (body.topCatalog === "catalogListDog") {
+
+            if (neckGirth) size = {...size, "size.neckGirth": {$gte : Number(neckGirth)}};
+            if (frontPawsLength) size = {...size, "size.frontPawsLength": {$gte : Number(frontPawsLength)}};
+            if (chestGirth) size = {...size, "size.chestGirth": {$gte : Number(chestGirth)}};
+            if (growthDog) size = {...size, "size.growthDog": {$gte : Number(growthDog)}};
+            if (waistDog) size = {...size, "size.waistDog": {$gte : Number(waistDog)}};
+            if (hindFeetLength) size = {...size, "size.hindFeetLength": {$gte : Number(hindFeetLength)}};
+            if (legLength) size = {...size, "size.legLength": {$gte : Number(legLength)}};
+            if (legWidth) size = {...size, "size.legWidth": {$gte : Number(legWidth)}};
+            if (legCircumference) size = {...size, "size.legCircumference": {$gte : Number(legCircumference)}};
+
+        } else {
+
+            if (body.subCatalog === ("subCatalogListMenTshirts" || "subCatalogListWomenTshirts" || "subCatalogListBoyTshirts" || "subCatalogListGirlTshirts")) {
+                if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+                if (shoulder) size = {...size, "size.shoulder": {$gte : Number(shoulder)}};
+                if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
+                if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+                if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+            } else if (body.subCatalog === ("subCatalogListMenShirts" || "subCatalogListWomenShirts" || "subCatalogListBoyShirts" || "subCatalogListGirlShirts")) {
+                if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+                if (shoulder) size = {...size, "size.shoulder": {$gte : Number(shoulder)}};
+                if (chest) size = {...size, "size.chest": {$gte : Number(chest)}};
+                if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+                if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+                if (armGirth) size = {...size, "size.armGirth": {$gte : Number(armGirth)}};
+            } else if (body.subCatalog === ("subCatalogListMenPants" || "subCatalogListWomenPants" || "subCatalogListBoyPants" || "subCatalogListGirlPants")) {
+                if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+                if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+                if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+                if (thighGirth) size = {...size, "size.thighGirth": {$gte : Number(thighGirth)}};
+            } else if (body.subCatalog === ("subCatalogListMenUnderwear" || "subCatalogListWomenUnderwear" || "subCatalogListBoyUnderwear" || "subCatalogListGirlUnderwear")) {
+                if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+                if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+                if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+                if (thighGirth) size = {...size, "size.thighGirth": {$gte : Number(thighGirth)}};
+            } else if (body.subCatalog === ("subCatalogListMenOuterwear" || "subCatalogListWomenOuterwear" || "subCatalogListBoyOuterwear" || "subCatalogListGirlOuterwear")) {
+                if (growth) size = {...size, "size.growth": {$gte : Number(growth)}};
+                if (waist) size = {...size, "size.waist": {$gte : Number(waist)}};
+                if (hips) size = {...size, "size.hips": {$gte : Number(hips)}};
+                if (thighGirth) size = {...size, "size.thighGirth": {$gte : Number(thighGirth)}};
+            } else if (body.subCatalog === ("subCatalogListMenHome" || "subCatalogListWomenHome" || "subCatalogListBoyHome" || "subCatalogListGirlHome")) {
+                if (palmGirth) size = {...size, "size.palmGirth": {$gte : Number(palmGirth)}};
+                if (headCircumference) size = {...size, "size.headCircumference": {$gte : Number(headCircumference)}};
+                if (fingerLength) size = {...size, "size.fingerLength": {$gte : Number(fingerLength)}};
+                if (waistAtNavelLevel) size = {...size, "size.waistAtNavelLevel": {$gte : Number(waistAtNavelLevel)}};
+            } else {
+                size = {...size, "size.general": "general"}
+            }
+        }
     }
     if (size) product = {...product, size};
     return product;
