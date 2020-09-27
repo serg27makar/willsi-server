@@ -2,6 +2,7 @@ const pp = require("../modules/productsParameters");
 const express = require('express');
 const router = express.Router();
 module.exports = router ;
+const ObjectId = require("mongodb").ObjectId;
 
 module.exports.User = function(body) {
     const { UserName, Email, UsersParameters, Permission, Password, UserStore, Postpone } = body;
@@ -129,12 +130,55 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                     }
                 }
                 pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {
+                    if (result.length > 0) {
+                        let compatibility = 0;
+                        let i = 0;
+                        for (const key in result[0].size) {
+                            const gte = searchParams.size["size." + key]['$gte'];
+                            const ose = result[0].size[key];
+                            compatibility = gte / ose + compatibility;
+                            i++
+                        }
+                        compatibility = compatibility / i * 100;
+                        result[0] = {
+                            ...result[0],
+                            compatibility: compatibility.toFixed(0),
+                        };
+                    }
                     foo(result);
                 });
             });
         } else {
             return fatBack(fullProduct);
         }
+    });
+};
 
+module.exports.getPostpone = function (collection, parameters, product, parameter, compatibility, fatBack) {
+    const fullProduct = [];
+    function returnData(item) {
+        item = {
+            ...item,
+            postpone: true,
+            compatibility,
+        };
+        fullProduct.push(item);
+        return fatBack(fullProduct);
+    }
+    collection.findOne({_id: ObjectId(product)}, function (err, result) {
+        if (result) {
+            function foo(item) {
+                if (item && item.length > 0) {
+                    const Parameters = item;
+                    result = {...result, Parameters};
+                    returnData(result);
+                }
+            }
+            pp.getParametersToId(parameters, parameter, (resultParameter) => {
+                foo(resultParameter);
+            });
+        } else {
+            return fatBack(fullProduct);
+        }
     });
 };

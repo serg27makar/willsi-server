@@ -40,6 +40,35 @@ router.post("/getProductDataToId", function (req, res) {
     });
 });
 
+router.post("/getPostpone", function (req, res) {
+    const collection = req.app.locals.products;
+    const parameters = req.app.locals.parameters;
+    const fatBack = [];
+    try {
+        if (res) {
+            function foo(result) {
+                res.send(result);
+                res.end();
+            }
+            req.body.map((item) => {
+                const {product, parameter, compatibility} = item;
+                db.getPostpone(collection, parameters, product, parameter, compatibility, (result) => {
+                    fatBack.push(result[0]);
+                    if (req.body.length === fatBack.length) {
+                        foo(fatBack);
+                    }
+                });
+            });
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    } catch (e) {
+        res.send(e);
+        res.end();
+    }
+});
+
 router.post("/getProductDataToParams", function (req, res) {
     const collection = req.app.locals.products;
     const parameters = req.app.locals.parameters;
