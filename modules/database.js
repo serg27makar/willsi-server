@@ -114,9 +114,15 @@ module.exports.getParametersToId = async function (collection, ProductId) {
 module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, skip, fatBack) {
     const fullProduct = [];
     function returnData(item, length, index) {
-        fullProduct.push(item);
-        if(length === index + 1) {
-            return fatBack(fullProduct);
+        if (item && length) {
+            fullProduct.push(item);
+            if (length === index + 1) {
+                return fatBack(fullProduct);
+            }
+        } else {
+            if (length === index + 1) {
+                return fatBack(null);
+            }
         }
     }
     collection.find(product).skip(skip || 0).limit(12).toArray(function (err, res) {
@@ -127,6 +133,8 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                         const Parameters = item;
                         obj = {...obj, Parameters};
                         returnData(obj, res.length, index);
+                    } else {
+                        returnData(null, res.length, index);
                     }
                 }
                 pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {

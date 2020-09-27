@@ -78,8 +78,13 @@ router.post("/getProductDataToParams", function (req, res) {
     try {
         if (res) {
             db.getProductDataToParams(collection, product, searchParams, parameters, skip, (products) => {
-                res.send(products);
-                res.end();
+                if (products) {
+                    res.send(products);
+                    res.end();
+                } else {
+                    res.sendStatus(404);
+                    res.end();
+                }
             });
         } else {
             res.sendStatus(401);
@@ -89,7 +94,6 @@ router.post("/getProductDataToParams", function (req, res) {
         res.send(e);
         res.end();
     }
-
 });
 
 
