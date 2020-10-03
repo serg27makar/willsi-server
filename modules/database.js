@@ -31,11 +31,38 @@ module.exports.Store = function(body) {
     return store;
 };
 
+module.exports.Parameter = function(body) {
+    const {ProductId, color, size, SizeStandard, VendorCode, Price} = body;
+    let parameter = {};
+    if (ProductId) parameter = {...parameter, ProductId};
+    if (color) parameter = {...parameter, color};
+    if (size) parameter = {...parameter, size};
+    if (SizeStandard) parameter = {...parameter, SizeStandard};
+    if (VendorCode) parameter = {...parameter, VendorCode};
+    if (Price) parameter = {...parameter, Price};
+    return parameter;
+};
+
 module.exports.Product = function(body) {
-    const {topCatalog, subCatalog} = body;
+    const {topCatalog, subCatalog, ProductStoreID, Manufacturer,
+        ProdName, ProductCode, Photo1, Photo2, Photo3, LinkToProduct,
+        Description, Composition, ModelParameters, CareInstructions, PaymentAndDelivery} = body;
     let product = {};
     if (topCatalog) product = {...product, topCatalog};
     if (subCatalog) product = {...product, subCatalog};
+    if (ProductStoreID) product = {...product, ProductStoreID};
+    if (Manufacturer) product = {...product, Manufacturer};
+    if (ProdName) product = {...product, ProdName};
+    if (ProductCode) product = {...product, ProductCode};
+    if (Photo1) product = {...product, Photo1};
+    if (Photo2) product = {...product, Photo2};
+    if (Photo3) product = {...product, Photo3};
+    if (LinkToProduct) product = {...product, LinkToProduct};
+    if (Description) product = {...product, Description};
+    if (Composition) product = {...product, Composition};
+    if (ModelParameters) product = {...product, ModelParameters};
+    if (CareInstructions) product = {...product, CareInstructions};
+    if (PaymentAndDelivery) product = {...product, PaymentAndDelivery};
     return product;
 };
 
@@ -96,6 +123,10 @@ module.exports.SearchParams = function(body) {
                 if (headCircumference) size = {...size, "size.headCircumference": {$gte : Number(headCircumference)}};
                 if (fingerLength) size = {...size, "size.fingerLength": {$gte : Number(fingerLength)}};
                 if (waistAtNavelLevel) size = {...size, "size.waistAtNavelLevel": {$gte : Number(waistAtNavelLevel)}};
+                if (insideLegLength) size = {...size, "size.legCircumference": {$gte : Number(insideLegLength)}};
+                if (footLength) size = {...size, "size.legCircumference": {$gte : Number(footLength)}};
+                if (wideFootGirth) size = {...size, "size.legCircumference": {$gte : Number(wideFootGirth)}};
+                if (footCircumference) size = {...size, "size.legCircumference": {$gte : Number(footCircumference)}};
             } else {
                 size = {...size, "size.general": "general"}
             }

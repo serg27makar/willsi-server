@@ -1,6 +1,7 @@
 const db = require("../modules/database");
 const express = require('express');
 const router = express.Router();
+const ObjectId = require("mongodb").ObjectId;
 module.exports = router ;
 
 router.post("/added", function (req, res) {
@@ -11,6 +12,22 @@ router.post("/added", function (req, res) {
         res.send(response);
         res.end()
     });
+});
+
+router.post("/update", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { ProductID } = req.body;
+    const collection = req.app.locals.products;
+    const product = db.Product(req.body);
+    collection.updateOne({_id: ObjectId(ProductID)}, {$set: product}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
 });
 
 router.get("/getProductData", function (req, res) {
