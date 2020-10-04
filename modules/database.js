@@ -171,17 +171,22 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                 pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {
                     if (result.length > 0) {
                         let compatibility = 0;
+                        let secondCompatibility = 0;
                         let i = 0;
+                        let quadCompatibility = 0;
                         for (const key in result[0].size) {
                             const gte = searchParams.size["size." + key]['$gte'];
                             const ose = result[0].size[key];
                             compatibility = gte / ose + compatibility;
+                            quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
                             i++
                         }
                         compatibility = compatibility / i * 100;
+                        secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
                         result[0] = {
                             ...result[0],
                             compatibility: compatibility.toFixed(0),
+                            secondCompatibility: secondCompatibility.toFixed(0),
                         };
                     }
                     foo(result);
