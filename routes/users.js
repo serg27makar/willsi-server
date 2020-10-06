@@ -1,4 +1,5 @@
 const db = require("../modules/database");
+const util = require("../modules/utilities");
 const express = require('express');
 const router = express.Router();
 const ObjectId = require("mongodb").ObjectId;
@@ -101,4 +102,10 @@ router.get("/getUserData", function (req, res) {
             res.end();
         }
     });
+});
+
+router.post("/postSendEmail", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    util.sendEmailToWillsi(req.body);
+    res.send("result");
 });

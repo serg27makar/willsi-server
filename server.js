@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use((request,response,next)=>{
     if (['/users/register',
+        '/users/postSendEmail',
         '/users/login'].includes(request.path)) {
         next();
         return
