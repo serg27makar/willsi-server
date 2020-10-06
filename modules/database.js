@@ -143,6 +143,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
 };
 
 module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, skip, fatBack) {
+    product = pp.DefaultSubCatalogs(product);
     const fullProduct = [];
     function returnData(item, length, index) {
         if (item && length) {
@@ -160,7 +161,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
         if (res.length > 0) {
             res.map((obj, index) => {
                 function foo(item) {
-                    if (item && item.length > 0) {
+                    if (item) {
                         const Parameters = item;
                         obj = {...obj, Parameters};
                         returnData(obj, res.length, index);
@@ -169,22 +170,22 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                     }
                 }
                 pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {
-                    if (result.length > 0) {
+                    if (result) {
                         let compatibility = 0;
                         let secondCompatibility = 0;
                         let i = 0;
                         let quadCompatibility = 0;
-                        for (const key in result[0].size) {
+                        for (const key in result.size) {
                             const gte = searchParams.size["size." + key]['$gte'];
-                            const ose = result[0].size[key];
+                            const ose = result.size[key];
                             compatibility = gte / ose + compatibility;
                             quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
                             i++
                         }
                         compatibility = compatibility / i * 100;
                         secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
-                        result[0] = {
-                            ...result[0],
+                        result = {
+                            ...result,
                             compatibility: compatibility.toFixed(0),
                             secondCompatibility: secondCompatibility.toFixed(0),
                         };
