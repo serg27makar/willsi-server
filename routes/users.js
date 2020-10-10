@@ -109,3 +109,23 @@ router.post("/postSendEmail", function (req, res) {
     util.sendEmailToWillsi(req.body);
     res.send("result");
 });
+
+router.post("/getAllUsers", function (req, res) {
+    const collection = req.app.locals.collection;
+    collection.find({}).toArray(function (err, result) {
+        if (res) {
+            let size = 0;
+            for (const key in result) {
+                if (result.hasOwnProperty(key)) size++;
+            }
+            const count = {
+                size
+            };
+            res.send(count);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
