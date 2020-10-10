@@ -142,7 +142,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, skip, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     const fullProduct = [];
     function returnData(item, length, index) {
@@ -157,7 +157,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
             }
         }
     }
-    collection.find(product).skip(skip || 0).limit(12).toArray(function (err, res) {
+    collection.find(product).toArray(function (err, res) {
         if (res.length > 0) {
             res.map((obj, index) => {
                 function foo(item) {

@@ -89,12 +89,11 @@ router.post("/getPostpone", function (req, res) {
 router.post("/getProductDataToParams", function (req, res) {
     const collection = req.app.locals.products;
     const parameters = req.app.locals.parameters;
-    const {skip} = req.body;
     const product = db.Product(req.body);
     const searchParams =  db.SearchParams(req.body);
     try {
         if (res) {
-            db.getProductDataToParams(collection, product, searchParams, parameters, skip, (products) => {
+            db.getProductDataToParams(collection, product, searchParams, parameters, (products) => {
                 if (products) {
                     res.send(products);
                     res.end();
