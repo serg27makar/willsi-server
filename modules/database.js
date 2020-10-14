@@ -153,7 +153,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
             }
         } else {
             if (length === index + 1) {
-                return fatBack(null);
+                return fatBack(fullProduct);
             }
         }
     }
