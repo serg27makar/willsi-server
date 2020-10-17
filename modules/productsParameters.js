@@ -12,7 +12,7 @@ module.exports.getParametersToSearchParams = function ( parameters, ProductId, s
 };
 
 module.exports.getParametersToId = function ( parameters, parameter, fetBack) {
-    parameters.find({_id: ObjectId(parameter)}).toArray(function (err, result) {
+    parameters.findOne({_id: ObjectId(parameter)}, function (err, result) {
         return fetBack(result);
     });
 };

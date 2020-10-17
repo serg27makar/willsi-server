@@ -213,7 +213,7 @@ module.exports.getPostpone = function (collection, parameters, product, paramete
     collection.findOne({_id: ObjectId(product)}, function (err, result) {
         if (result) {
             function foo(item) {
-                if (item && item.length > 0) {
+                if (item) {
                     const Parameters = item;
                     result = {...result, Parameters};
                     returnData(result);
