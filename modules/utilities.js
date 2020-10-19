@@ -1,7 +1,8 @@
 const nodemailer = require ('nodemailer');
 
-const adminEmail = "good84serg@gmail.com";
-const password = "ant1B10t1k1";
+const adminEmail = "startwillsi@gmail.com";
+const willsiEmail = "info@willsi.top";
+const password = "123Willsi!";
 
 const transporter = nodemailer.createTransport ({
     service: 'gmail',
@@ -16,7 +17,7 @@ module.exports.sendEmailToWillsi = function (data) {
     const {UserName, UserPhone} = data;
     const mailOptions = {
         from: `Willsi <${adminEmail}>`,
-        to: adminEmail,
+        to: willsiEmail,
         subject: 'Application for cooperation',
         html: `<p> Имя клиента ${UserName}, телефон клиента ${UserPhone}</p>`,
     };
