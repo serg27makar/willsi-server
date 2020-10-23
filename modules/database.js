@@ -46,7 +46,8 @@ module.exports.Parameter = function(body) {
 module.exports.Product = function(body) {
     const {topCatalog, subCatalog, ProductStoreID, Manufacturer,
         ProdName, ProductCode, Photo1, Photo2, Photo3, LinkToProduct,
-        Description, Composition, ModelParameters, CareInstructions, PaymentAndDelivery} = body;
+        Description, Composition, ModelParameters, CareInstructions,
+        PaymentAndDelivery, storeAdmin, primaryAdmin} = body;
     let product = {};
     if (topCatalog) product = {...product, topCatalog};
     if (subCatalog) product = {...product, subCatalog};
@@ -63,6 +64,7 @@ module.exports.Product = function(body) {
     if (ModelParameters) product = {...product, ModelParameters};
     if (CareInstructions) product = {...product, CareInstructions};
     if (PaymentAndDelivery) product = {...product, PaymentAndDelivery};
+    product = {...product, primaryAdmin, storeAdmin};
     return product;
 };
 
@@ -139,6 +141,11 @@ module.exports.getParametersToId = async function (collection, ProductId) {
 
 module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
+    product = {
+        ...product,
+        primaryAdmin: false,
+        storeAdmin: false
+    };
     const fullProduct = [];
     function returnData(item, length, index) {
         if (item && length) {
