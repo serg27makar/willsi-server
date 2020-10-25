@@ -1,4 +1,5 @@
 const pp = require("../modules/productsParameters");
+const util = require("../modules/utilities");
 const express = require('express');
 const router = express.Router();
 module.exports = router ;
@@ -139,13 +140,19 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, parameters, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     product = {
         ...product,
         primaryAdmin: false,
         storeAdmin: false
     };
+    if (!util.isEmptyObject(searchItemParams) && searchItemParams.itemValue.length) {
+        product = {
+            ...product,
+            [searchItemParams.catalogName]: {$in : searchItemParams.itemValue},
+        };
+    }
     const fullProduct = [];
     function returnData(item, length, index) {
         if (item && length) {

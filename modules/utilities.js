@@ -28,3 +28,12 @@ module.exports.sendEmailToWillsi = function (data) {
         }
     });
 };
+
+module.exports.isEmptyObject = function (obj) {
+    for (const i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            return false;
+        }
+    }
+    return true;
+};
