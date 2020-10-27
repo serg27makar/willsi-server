@@ -140,7 +140,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, parameters, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemColor, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     product = {
         ...product,
@@ -178,7 +178,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                         returnData(null, res.length, index);
                     }
                 }
-                pp.getParametersToSearchParams(parameters, obj._id, searchParams, (result) => {
+                pp.getParametersToSearchParams(parameters, obj._id, searchParams, searchItemColor, (result) => {
                     if (result) {
                         let compatibility = 0;
                         let secondCompatibility = 0;

@@ -92,9 +92,10 @@ router.post("/getProductDataToParams", function (req, res) {
     const product = db.Product(req.body);
     const searchParams =  db.SearchParams(req.body);
     const {searchItemParams} = req.body;
+    const {searchItemColor} = req.body;
     try {
         if (res) {
-            db.getProductDataToParams(collection, product, searchParams, searchItemParams, parameters, (products) => {
+            db.getProductDataToParams(collection, product, searchParams, searchItemParams, searchItemColor, parameters, (products) => {
                 if (products) {
                     res.send(products);
                     res.end();

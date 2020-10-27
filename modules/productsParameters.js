@@ -1,11 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const util = require("../modules/utilities");
 module.exports = router ;
 const ObjectId = require("mongodb").ObjectId;
 
-module.exports.getParametersToSearchParams = function ( parameters, ProductId, searchParams, fetBack) {
+module.exports.getParametersToSearchParams = function ( parameters, ProductId, searchParams, searchItemColor, fetBack) {
     let SearchParams = searchParams.size;
     SearchParams = {...SearchParams, ProductId: String(ProductId)};
+    if (!util.isEmptyObject(searchItemColor) && searchItemColor.itemValue.length) {
+        SearchParams = {
+            ...SearchParams,
+            [searchItemColor.catalogName]: {$in: searchItemColor.itemValue},
+        };
+    }
     parameters.findOne(SearchParams, function (err, result) {
         return fetBack(result);
     });
