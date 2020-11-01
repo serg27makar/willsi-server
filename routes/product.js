@@ -1,4 +1,5 @@
 const db = require("../modules/database");
+const util = require("../modules/utilities");
 const express = require('express');
 const router = express.Router();
 const ObjectId = require("mongodb").ObjectId;
@@ -90,7 +91,7 @@ router.post("/getProductDataToParams", function (req, res) {
     const collection = req.app.locals.products;
     const parameters = req.app.locals.parameters;
     const product = db.Product(req.body);
-    const searchParams =  db.SearchParams(req.body);
+    const searchParams = util.SearchParams(req.body);
     const {searchItemParams} = req.body;
     const {searchItemColor} = req.body;
     try {
@@ -114,4 +115,28 @@ router.post("/getProductDataToParams", function (req, res) {
     }
 });
 
+router.post("/getAllProductDataToParams", function (req, res) {
+    const collection = req.app.locals.products;
+    const parameters = req.app.locals.parameters;
+    const product = db.Product(req.body);
+    try {
+        if (res) {
+            db.getAllProductDataToParams(collection, parameters, product, req.body, (products) => {
+                if (products) {
+                    res.send(products);
+                    res.end();
+                } else {
+                    res.sendStatus(404);
+                    res.end();
+                }
+            });
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    } catch (e) {
+        res.send(e);
+        res.end();
+    }
+});
 

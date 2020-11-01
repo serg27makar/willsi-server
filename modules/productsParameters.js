@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const util = require("../modules/utilities");
+const util = require("./utilities");
 module.exports = router ;
 const ObjectId = require("mongodb").ObjectId;
 
@@ -17,6 +17,40 @@ module.exports.getParametersToSearchParams = function ( parameters, ProductId, s
         return fetBack(result);
     });
 };
+
+module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog, body, fetBack) {
+    body = {
+        ...body,
+        subCatalog,
+    };
+    const params = util.SearchParams(body);
+    let SearchParams = params.size;
+    SearchParams = {...SearchParams, ProductId: String(ProductId)};
+    parameters.findOne(SearchParams, function (err, result) {
+        if (result) {
+            let compatibility = 0;
+            let secondCompatibility = 0;
+            let i = 0;
+            let quadCompatibility = 0;
+            for (const key in result.size) {
+                const gte = params.size["size." + key]['$gte'];
+                const ose = result.size[key];
+                compatibility = gte / ose + compatibility;
+                quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
+                i++
+            }
+            compatibility = compatibility / i * 100;
+            secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
+            result = {
+                ...result,
+                compatibility: compatibility.toFixed(0),
+                secondCompatibility: secondCompatibility.toFixed(0),
+            };
+        }
+        return fetBack(result);
+    });
+};
+
 
 module.exports.getParametersToId = function ( parameters, parameter, fetBack) {
     parameters.findOne({_id: ObjectId(parameter)}, function (err, result) {
