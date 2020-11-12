@@ -15,6 +15,7 @@ module.exports.User = function(body) {
     if (Permission) user = {...user, Permission};
     if (UserStore) user = {...user, UserStore};
     if (Postpone) user = {...user, Postpone};
+    console.log(user);
     return user;
 };
 
