@@ -27,25 +27,36 @@ module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog
     let SearchParams = params.size;
     SearchParams = {...SearchParams, ProductId: String(ProductId)};
     parameters.findOne(SearchParams, function (err, result) {
+        let noSize = false;
         if (result) {
-            let compatibility = 0;
-            let secondCompatibility = 0;
-            let i = 0;
-            let quadCompatibility = 0;
             for (const key in result.size) {
-                const gte = params.size["size." + key]['$gte'];
-                const ose = result.size[key];
-                compatibility = gte / ose + compatibility;
-                quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
-                i++
+                if (!body.SearchParams[key] && !noSize) {
+                    noSize = true;
+                }
             }
-            compatibility = compatibility / i * 100;
-            secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
-            result = {
-                ...result,
-                compatibility: compatibility.toFixed(0),
-                secondCompatibility: secondCompatibility.toFixed(0),
-            };
+            if (!noSize) {
+                let compatibility = 0;
+                let secondCompatibility = 0;
+                let i = 0;
+                let quadCompatibility = 0;
+                for (const key in result.size) {
+                    const gte = params.size["size." + key]['$gte'];
+                    const ose = result.size[key];
+                    compatibility = gte / ose + compatibility;
+                    quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
+                    i++
+                }
+                compatibility = compatibility / i * 100;
+                secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
+                result = {
+                    ...result,
+                    compatibility: compatibility.toFixed(0),
+                    secondCompatibility: secondCompatibility.toFixed(0),
+                };
+            }
+        }
+        if (noSize) {
+            return fetBack(null);
         }
         return fetBack(result);
     });
