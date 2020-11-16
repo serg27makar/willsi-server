@@ -146,6 +146,9 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
 module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemColor, fatBack) {
     const fullProduct = [];
     product = {
+        ...product,
+        primaryAdmin: false,
+        storeAdmin: false,
         topCatalog: product.topCatalog,
         subCatalog: {$nin : ["subCatalogListMenGeneral", "subCatalogListWomenGeneral", "subCatalogListBoyGeneral", "subCatalogListGirlGeneral"]}
     };
