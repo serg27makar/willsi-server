@@ -119,9 +119,11 @@ router.post("/getAllProductDataToParams", function (req, res) {
     const collection = req.app.locals.products;
     const parameters = req.app.locals.parameters;
     const product = db.Product(req.body);
+    const {searchItemParams} = req.body;
+    const {searchItemColor} = req.body;
     try {
         if (res) {
-            db.getAllProductDataToParams(collection, parameters, product, req.body, (products) => {
+            db.getAllProductDataToParams(collection, parameters, product, req.body, searchItemParams, searchItemColor, (products) => {
                 if (products) {
                     res.send(products);
                     res.end();

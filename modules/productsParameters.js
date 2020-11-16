@@ -18,7 +18,7 @@ module.exports.getParametersToSearchParams = function ( parameters, ProductId, s
     });
 };
 
-module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog, body, fetBack) {
+module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog, body, searchItemColor, fetBack) {
     body = {
         ...body,
         subCatalog,
@@ -26,6 +26,12 @@ module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog
     const params = util.SearchParams(body);
     let SearchParams = params.size;
     SearchParams = {...SearchParams, ProductId: String(ProductId)};
+    if (!util.isEmptyObject(searchItemColor) && searchItemColor.itemValue.length) {
+        SearchParams = {
+            ...SearchParams,
+            [searchItemColor.catalogName]: {$in: searchItemColor.itemValue},
+        };
+    }
     parameters.findOne(SearchParams, function (err, result) {
         let noSize = false;
         if (result) {
@@ -50,8 +56,8 @@ module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog
                 secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
                 result = {
                     ...result,
-                    compatibility: compatibility.toFixed(0),
-                    secondCompatibility: secondCompatibility.toFixed(0),
+                    compatibility: compatibility.toFixed(2),
+                    secondCompatibility: secondCompatibility.toFixed(2),
                 };
             }
         }
