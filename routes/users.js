@@ -129,3 +129,23 @@ router.post("/getAllUsers", function (req, res) {
         }
     });
 });
+
+router.post("/getAllUsersData", function (req, res) {
+    const collection = req.app.locals.collection;
+    const { Permission } = req.body;
+    let filter = {}
+    if (Permission) {
+        filter = {
+            Permission
+        }
+    }
+    collection.find(filter).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});

@@ -142,3 +142,16 @@ router.post("/getAllProductDataToParams", function (req, res) {
     }
 });
 
+router.post("/getAllProductsData", function (req, res) {
+    const collection = req.app.locals.products;
+    let filter = {}
+    collection.find(filter).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});

@@ -70,3 +70,17 @@ router.post("/update", function (req, res) {
         }
     })
 });
+
+router.post("/getAllStoresData", function (req, res) {
+    const collection = req.app.locals.store;
+    let filter = {}
+    collection.find(filter).toArray(function (err, result) {
+        if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
