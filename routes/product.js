@@ -144,7 +144,8 @@ router.post("/getAllProductDataToParams", function (req, res) {
 
 router.post("/getAllProductsData", function (req, res) {
     const collection = req.app.locals.products;
-    let filter = {}
+    const {ProductStoreID} = req.body
+    const filter = {ProductStoreID}
     collection.find(filter).toArray(function (err, result) {
         if (res) {
             res.send(result);
