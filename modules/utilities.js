@@ -3,6 +3,10 @@ const nodemailer = require ('nodemailer');
 const adminEmail = "startwillsi@gmail.com";
 const willsiEmail = "info@willsi.top";
 const password = "123Willsi!";
+const subjectTypes = {
+    "afc": "Application for cooperation",
+    "shm": "Support message",
+}
 
 const transporter = nodemailer.createTransport ({
     service: 'gmail',
@@ -14,12 +18,14 @@ const transporter = nodemailer.createTransport ({
 
 
 module.exports.sendEmailToWillsi = function (data) {
-    const {UserName, UserPhone} = data;
+    const {UserName, UserPhone, UserID, message, subject} = data;
+    const message1 = `<p> Имя клиента ${UserName}, телефон клиента ${UserPhone}</p>`;
+    const message2 = `<p> ID клиента ${UserID}, сообщение клиента ${message}</p>`;
     const mailOptions = {
         from: `Willsi <${adminEmail}>`,
         to: willsiEmail,
-        subject: 'Application for cooperation',
-        html: `<p> Имя клиента ${UserName}, телефон клиента ${UserPhone}</p>`,
+        subject: subjectTypes[subject],
+        html: subject === "afc" ? message1 : message2,
     };
     transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
