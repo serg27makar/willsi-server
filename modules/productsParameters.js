@@ -4,7 +4,7 @@ const util = require("./utilities");
 module.exports = router ;
 const ObjectId = require("mongodb").ObjectId;
 
-module.exports.getParametersToSearchParams = function ( parameters, ProductId, searchParams, searchItemColor, fetBack) {
+module.exports.getParametersToSearchParams = function ( parameters, ProductId, searchParams, searchItemColor, searchItemPrice, fetBack) {
     let SearchParams = searchParams.size;
     SearchParams = {...SearchParams, ProductId: String(ProductId)};
     if (!util.isEmptyObject(searchItemColor) && searchItemColor.itemValue.length) {
@@ -13,12 +13,19 @@ module.exports.getParametersToSearchParams = function ( parameters, ProductId, s
             [searchItemColor.catalogName]: {$in: searchItemColor.itemValue},
         };
     }
+    if (!util.isEmptyObject(searchItemPrice)) {
+        SearchParams = {
+            ...SearchParams,
+            "Price": {$gte: searchItemPrice.priceFrom, $lte: searchItemPrice.priceTo},
+        };
+    }
+
     parameters.findOne(SearchParams, function (err, result) {
         return fetBack(result);
     });
 };
 
-module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog, body, searchItemColor, fetBack) {
+module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog, body, searchItemColor, searchItemPrice, fetBack) {
     body = {
         ...body,
         subCatalog,
@@ -30,6 +37,12 @@ module.exports.getParametersToAll = function ( parameters, ProductId, subCatalog
         SearchParams = {
             ...SearchParams,
             [searchItemColor.catalogName]: {$in: searchItemColor.itemValue},
+        };
+    }
+    if (!util.isEmptyObject(searchItemPrice)) {
+        SearchParams = {
+            ...SearchParams,
+            "Price": {$gte: searchItemPrice.priceFrom, $lte: searchItemPrice.priceTo},
         };
     }
     parameters.findOne(SearchParams, function (err, result) {

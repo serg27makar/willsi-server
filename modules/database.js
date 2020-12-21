@@ -75,7 +75,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemColor, parameters, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemColor, searchItemPrice, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     product = {
         ...product,
@@ -113,7 +113,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                         returnData(null, res.length, index);
                     }
                 }
-                pp.getParametersToSearchParams(parameters, obj._id, searchParams, searchItemColor, (result) => {
+                pp.getParametersToSearchParams(parameters, obj._id, searchParams, searchItemColor, searchItemPrice, (result) => {
                     if (result) {
                         let compatibility = 0;
                         let secondCompatibility = 0;
@@ -143,7 +143,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
     });
 };
 
-module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemColor, fatBack) {
+module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemColor, searchItemPrice, fatBack) {
     const fullProduct = [];
     product = {
         ...product,
@@ -182,7 +182,7 @@ module.exports.getAllProductDataToParams = function (collection, parameters, pro
                         returnData(null, res.length, index);
                     }
                 }
-                pp.getParametersToAll(parameters, obj._id, obj.subCatalog, searchParams, searchItemColor, (result) => {
+                pp.getParametersToAll(parameters, obj._id, obj.subCatalog, searchParams, searchItemColor, searchItemPrice, (result) => {
                     foo(result);
                 });
             });
