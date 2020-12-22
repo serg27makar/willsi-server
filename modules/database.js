@@ -75,7 +75,7 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemColor, searchItemPrice, parameters, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     product = {
         ...product,
@@ -87,6 +87,9 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
             ...product,
             [searchItemParams.catalogName]: {$in : searchItemParams.itemValue},
         };
+    }
+    if (searchItemNew) {
+        product = {...product, "registrationDate": {$gte : searchItemNew}};
     }
     const fullProduct = [];
     function returnData(item, length, index) {
@@ -143,7 +146,7 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
     });
 };
 
-module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemColor, searchItemPrice, fatBack) {
+module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, fatBack) {
     const fullProduct = [];
     product = {
         ...product,
@@ -157,6 +160,9 @@ module.exports.getAllProductDataToParams = function (collection, parameters, pro
             ...product,
             [searchItemParams.catalogName]: {$in : searchItemParams.itemValue},
         };
+    }
+    if (searchItemNew) {
+        product = {...product, "registrationDate": {$gte : searchItemNew}};
     }
     function returnData(item, length, index) {
         if (item && length) {
