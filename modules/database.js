@@ -91,31 +91,22 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
     if (searchItemNew) {
         product = {...product, "registrationDate": {$gte : searchItemNew}};
     }
-    const fullProduct = [];
-    function returnData(item, length, index) {
-        if (item && length) {
-            fullProduct.push(item);
-            if (length === index + 1) {
-                return fatBack(fullProduct);
-            }
-        } else {
-            if (length === index + 1) {
-                return fatBack(fullProduct);
-            }
-        }
-    }
+    const returnDataObj = [];
     collection.find(product).toArray(function (err, res) {
         if (res.length > 0) {
-            res.map((obj, index) => {
-                function foo(item) {
-                    if (item) {
-                        const Parameters = item;
-                        obj = {...obj, Parameters};
-                        returnData(obj, res.length, index);
-                    } else {
-                        returnData(null, res.length, index);
-                    }
+            function foo(obj, item, index) {
+                if (item) {
+                    const Parameters = item;
+                    obj = {...obj, Parameters};
+                    returnDataObj.push(obj)
                 }
+                if (res.length === index +1) {
+                    setTimeout(() => {
+                        return fatBack(returnDataObj);
+                    }, 50);
+                }
+            }
+            res.map((obj, index) => {
                 pp.getParametersToSearchParams(parameters, obj._id, searchParams, searchItemColor, searchItemPrice, (result) => {
                     if (result) {
                         let compatibility = 0;
@@ -137,17 +128,16 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
                             secondCompatibility: secondCompatibility.toFixed(2),
                         };
                     }
-                    foo(result);
+                    foo(obj, result, index);
                 });
             });
         } else {
-            return fatBack(fullProduct);
+            return fatBack(returnDataObj);
         }
     });
 };
 
 module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, fatBack) {
-    const fullProduct = [];
     product = {
         ...product,
         primaryAdmin: false,
@@ -164,36 +154,28 @@ module.exports.getAllProductDataToParams = function (collection, parameters, pro
     if (searchItemNew) {
         product = {...product, "registrationDate": {$gte : searchItemNew}};
     }
-    function returnData(item, length, index) {
-        if (item && length) {
-            fullProduct.push(item);
-            if (length === index + 1) {
-                return fatBack(fullProduct);
-            }
-        } else {
-            if (length === index + 1) {
-                return fatBack(fullProduct);
-            }
-        }
-    }
+    const returnDataObj = [];
     collection.find(product).toArray(function (err, res) {
         if (res.length > 0) {
-            res.map((obj, index) => {
-                function foo(item) {
-                    if (item) {
-                        const Parameters = item;
-                        obj = {...obj, Parameters};
-                        returnData(obj, res.length, index);
-                    } else {
-                        returnData(null, res.length, index);
-                    }
+            function foo(obj, item, index) {
+                if (item) {
+                    const Parameters = item;
+                    obj = {...obj, Parameters};
+                    returnDataObj.push(obj)
                 }
+                if (res.length === index +1) {
+                    setTimeout(() => {
+                        return fatBack(returnDataObj);
+                    }, 50);
+                }
+            }
+            res.map((obj, index) => {
                 pp.getParametersToAll(parameters, obj._id, obj.subCatalog, searchParams, searchItemColor, searchItemPrice, (result) => {
-                    foo(result);
+                    foo(obj, result, index);
                 });
             });
         } else {
-            return fatBack(fullProduct);
+            return fatBack(returnDataObj);
         }
     });
 
