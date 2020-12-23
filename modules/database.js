@@ -75,12 +75,13 @@ module.exports.getParametersToId = async function (collection, ProductId) {
     });
 };
 
-module.exports.getProductDataToParams = function (collection, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, parameters, fatBack) {
+module.exports.getProductDataToParams = function (collection, product, country, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, parameters, fatBack) {
     product = pp.DefaultSubCatalogs(product);
     product = {
         ...product,
         primaryAdmin: false,
-        storeAdmin: false
+        storeAdmin: false,
+        country
     };
     if (!util.isEmptyObject(searchItemParams) && searchItemParams.itemValue.length) {
         product = {
@@ -137,11 +138,12 @@ module.exports.getProductDataToParams = function (collection, product, searchPar
     });
 };
 
-module.exports.getAllProductDataToParams = function (collection, parameters, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, fatBack) {
+module.exports.getAllProductDataToParams = function (collection, parameters, product, country, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, fatBack) {
     product = {
         ...product,
         primaryAdmin: false,
         storeAdmin: false,
+        country,
         topCatalog: product.topCatalog,
         subCatalog: {$nin : ["subCatalogListMenGeneral", "subCatalogListWomenGeneral", "subCatalogListBoyGeneral", "subCatalogListGirlGeneral"]}
     };

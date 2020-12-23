@@ -96,9 +96,10 @@ router.post("/getProductDataToParams", function (req, res) {
     const {searchItemNew} = req.body;
     const {searchItemColor} = req.body;
     const {searchItemPrice} = req.body;
+    const {country} = req.body;
     try {
         if (res) {
-            db.getProductDataToParams(collection, product, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, parameters, (products) => {
+            db.getProductDataToParams(collection, product, country, searchParams, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, parameters, (products) => {
                 if (products) {
                     res.send(products);
                     res.end();
@@ -125,9 +126,10 @@ router.post("/getAllProductDataToParams", function (req, res) {
     const {searchItemNew} = req.body;
     const {searchItemColor} = req.body;
     const {searchItemPrice} = req.body;
+    const {country} = req.body;
     try {
         if (res) {
-            db.getAllProductDataToParams(collection, parameters, product, req.body, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, (products) => {
+            db.getAllProductDataToParams(collection, parameters, product, country, req.body, searchItemParams, searchItemNew, searchItemColor, searchItemPrice, (products) => {
                 if (products) {
                     res.send(products);
                     res.end();
