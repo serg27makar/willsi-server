@@ -6,15 +6,14 @@ module.exports = router ;
 
 router.post("/register", function (req, res) {
     if (!req.body) return res.sendStatus(400);
-    const {adminID, nameStore, urlStore, textStore, phoneStore, secondUrlStore, addressStore} = req.body;
+    const {adminID, nameStore, urlStore, phoneStore, addressStore, countryStore} = req.body;
     const store = {
         adminID,
         nameStore,
         urlStore,
-        textStore,
         phoneStore,
-        secondUrlStore,
         addressStore,
+        countryStore,
     };
     const collection = req.app.locals.store;
     collection.insertOne(store, function (err, response) {
@@ -83,4 +82,36 @@ router.post("/getAllStoresData", function (req, res) {
             res.end();
         }
     });
+});
+
+router.post("/removeStoreData", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { StoreID } = req.body;
+    const { removeData } = req.body;
+    const collection = req.app.locals.store;
+    collection.updateOne({_id: ObjectId(StoreID)}, {$unset: removeData}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
+});
+
+router.post("/setStoreData", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { StoreID } = req.body;
+    const { setData } = req.body;
+    const collection = req.app.locals.store;
+    collection.updateOne({_id: ObjectId(StoreID)}, {$set: setData}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
 });
