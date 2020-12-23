@@ -160,3 +160,35 @@ router.post("/getAllProductsData", function (req, res) {
         }
     });
 });
+
+router.post("/unsetProductData", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { ProductID } = req.body;
+    const { removeData } = req.body;
+    const collection = req.app.locals.products;
+    collection.updateOne({_id: ObjectId(ProductID)}, {$unset: removeData}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
+});
+
+router.post("/setProductData", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const { ProductID } = req.body;
+    const { setData } = req.body;
+    const collection = req.app.locals.products;
+    collection.updateOne({_id: ObjectId(ProductID)}, {$set: setData}, function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            res.send(result);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
+});
