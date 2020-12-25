@@ -78,6 +78,22 @@ router.post("/update", function (req, res) {
     })
 });
 
+router.post("/checkEmail", function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    const collection = req.app.locals.collection;
+    const email = req.body;
+    collection.find(email).toArray(function (err, result) {
+        if (err) return console.log(err);
+        if (result) {
+            const output = { result: result.length === 0}
+            res.send(output);
+        } else {
+            console.log(err);
+            res.send(err);
+        }
+    })
+});
+
 router.get("/getUserData", function (req, res) {
     let cookies = req.headers;
     const collection = req.app.locals.collection;
