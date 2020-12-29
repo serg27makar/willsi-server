@@ -19,6 +19,7 @@ app.use((request,response,next)=>{
         '/users/postSendEmail',
         '/users/getAllUsers',
         '/users/checkEmail',
+        '/product/getAllProductsData',
         '/users/login'].includes(request.path)) {
         next();
         return
