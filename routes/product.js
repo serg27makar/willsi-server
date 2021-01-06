@@ -163,6 +163,37 @@ router.post("/getAllProductsData", function (req, res) {
     });
 });
 
+router.post("/getProductsByLink", function (req, res) {
+    const linkArr = ["Photo1", "Photo2", "Photo3", "LinkToProduct"];
+    const collection = req.app.locals.products;
+    const {link} = req.body
+    let i = 0;
+    function foo(data) {
+        if (res) {
+            res.send(data);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    }
+    function search() {
+        collection.find({[linkArr[i]]:link}).toArray(function (err, result) {
+            if (result.length > 0) {
+                foo(result)
+            } else {
+                if (i <= linkArr.length) {
+                    i++;
+                    search();
+                } else {
+                    foo(result)
+                }
+            }
+        });
+    }
+    search();
+});
+
 router.post("/unsetProductData", function (req, res) {
     if (!req.body) return res.sendStatus(400);
     const { ProductID } = req.body;

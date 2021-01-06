@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require("../modules/database");
+const pp = require("../modules/productsParameters");
 const router = express.Router();
 const ObjectId = require("mongodb").ObjectId;
 module.exports = router ;
@@ -14,12 +15,45 @@ router.post("/added", function (req, res) {
     });
 });
 
-
 router.post("/getParametersToId", function (req, res) {
     const {ProductID} = req.body;
     const parameters = req.app.locals.parameters;
     parameters.find({ProductId: ProductID}).toArray(function (err, result) {
         if (res) {
+            res.send(result);
+            res.end();
+        } else {
+            res.sendStatus(401);
+            res.end();
+        }
+    });
+});
+
+router.post("/getParametersToIdBySearchParams", function (req, res) {
+    const {ProductID} = req.body;
+    const parameters = req.app.locals.parameters;
+    pp.getParametersToSearchParams(parameters, ProductID, req.body, {},  {}, (result) => {
+        if (res) {
+            if (result) {
+                let compatibility = 0;
+                let secondCompatibility = 0;
+                let i = 0;
+                let quadCompatibility = 0;
+                for (const key in result.size) {
+                    const gte = req.body.SearchParams[key];
+                    const ose = result.size[key];
+                    compatibility = gte / ose + compatibility;
+                    quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
+                    i++
+                }
+                compatibility = compatibility / i * 100;
+                secondCompatibility = Math.sqrt(quadCompatibility / i) * 100;
+                result = {
+                    ...result,
+                    compatibility: compatibility.toFixed(2),
+                    secondCompatibility: secondCompatibility.toFixed(2),
+                };
+            }
             res.send(result);
             res.end();
         } else {

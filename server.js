@@ -20,6 +20,8 @@ app.use((request,response,next)=>{
         '/users/getAllUsers',
         '/users/checkEmail',
         '/product/getAllProductsData',
+        '/product/getProductsByLink',
+        '/parameter/getParametersToIdBySearchParams',
         '/users/login'].includes(request.path)) {
         next();
         return
