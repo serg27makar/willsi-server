@@ -145,7 +145,9 @@ module.exports.getAllProductDataToParams = function (collection, parameters, pro
         storeAdmin: false,
         country,
         topCatalog: product.topCatalog,
-        subCatalog: {$nin : ["subCatalogListMenGeneral", "subCatalogListWomenGeneral", "subCatalogListBoyGeneral", "subCatalogListGirlGeneral"]}
+        subCatalog: {$nin : ["subCatalogListMenGeneral",
+                "subCatalogListWomenGeneral", "subCatalogListBoyGeneral",
+                "subCatalogListGirlGeneral", "subCatalogListDogGeneral"]}
     };
     if (!util.isEmptyObject(searchItemParams) && searchItemParams.itemValue.length) {
         product = {
