@@ -6,36 +6,32 @@ const ObjectId = require("mongodb").ObjectId;
 module.exports = router ;
 
 router.post('/login', async (req, res, next) => {
-    req.app.locals.dropDatabase()
-    res.send("data");
-    res.end();
-
-    // if (!req.body) return res.sendStatus(400);
-    // const { Email, Password } = req.body;
-    // const user = {Password: Password, Email: Email};
-    // const collection = req.app.locals.collection;
-    // collection.findOne(user, function (err, result) {
-    //     if (err) return console.log(err);
-    //     if (!result) {
-    //         res.send('find:0');
-    //         res.end();
-    //     } else {
-    //         const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore, Postpone} = result;
-    //         const data = {
-    //             UserID: _id,
-    //             UserName,
-    //             Email,
-    //             PublicAuth,
-    //             Phone,
-    //             UsersParameters,
-    //             Permission,
-    //             UserStore,
-    //             Postpone,
-    //         };
-    //         res.send(data);
-    //         res.end();
-    //     }
-    // });
+    if (!req.body) return res.sendStatus(400);
+    const { Email, Password } = req.body;
+    const user = {Password: Password, Email: Email};
+    const collection = req.app.locals.collection;
+    collection.findOne(user, function (err, result) {
+        if (err) return console.log(err);
+        if (!result) {
+            res.send('find:0');
+            res.end();
+        } else {
+            const {UserName, Email, _id, PublicAuth, Phone, UsersParameters, Permission, UserStore, Postpone} = result;
+            const data = {
+                UserID: _id,
+                UserName,
+                Email,
+                PublicAuth,
+                Phone,
+                UsersParameters,
+                Permission,
+                UserStore,
+                Postpone,
+            };
+            res.send(data);
+            res.end();
+        }
+    });
 });
 
 router.post("/register", function (req, res) {
