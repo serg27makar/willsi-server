@@ -18,6 +18,7 @@ app.use((request,response,next)=>{
     if (['/users/register',
         '/users/postSendEmail',
         '/users/getAllUsers',
+        '/users/clearAllDB',
         '/users/checkEmail',
         '/product/getAllProductsData',
         '/product/getProductsByLink',

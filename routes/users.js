@@ -165,3 +165,19 @@ router.post("/getAllUsersData", function (req, res) {
         }
     });
 });
+
+router.post("/clearAllDB", function (req, res) {
+    const productsDb = req.app.locals.productsDb;
+    const parametersDb = req.app.locals.parametersDb;
+    productsDb.remove({}, function (err, result) {
+        parametersDb.remove({}, function (err, result) {
+            if (res) {
+                res.send(result);
+                res.end();
+            } else {
+                res.sendStatus(401);
+                res.end();
+            }
+        });
+    });
+});
