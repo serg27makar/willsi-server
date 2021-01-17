@@ -39,9 +39,13 @@ router.post("/getParametersToIdBySearchParams", function (req, res) {
                 let secondCompatibility = 0;
                 let i = 0;
                 let quadCompatibility = 0;
+                let stop = false;
                 for (const key in result.size) {
                     const gte = req.body.SearchParams[key];
                     const ose = result.size[key];
+                    if (!stop) {
+                        stop = gte > ose
+                    }
                     compatibility = gte / ose + compatibility;
                     quadCompatibility = (gte * gte) / (ose * ose) + quadCompatibility;
                     i++
@@ -52,6 +56,7 @@ router.post("/getParametersToIdBySearchParams", function (req, res) {
                     ...result,
                     compatibility: compatibility.toFixed(2),
                     secondCompatibility: secondCompatibility.toFixed(2),
+                    stop,
                 };
             }
             res.send(result);
