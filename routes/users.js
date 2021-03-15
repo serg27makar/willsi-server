@@ -181,3 +181,14 @@ router.post("/clearAllDB", function (req, res) {
         });
     });
 });
+
+router.post("/allCountries", function (req, res) {
+    const data = require('../modules/allCountries.json');
+    try {
+        res.send(data);
+        res.end();
+    } catch (err) {
+        res.sendStatus(401);
+        res.end();
+    }
+});

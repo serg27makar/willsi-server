@@ -20,6 +20,7 @@ app.use((request,response,next)=>{
         '/users/getAllUsers',
         '/users/clearAllDB',
         '/users/checkEmail',
+        '/users/allCountries',
         '/product/getAllProductsData',
         '/product/getProductsByLink',
         '/product/getProductDataToParams',
