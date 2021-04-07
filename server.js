@@ -46,12 +46,22 @@ app.use((request,response,next)=>{
         next();
         return
     }
-    let cookies = request.headers;
-    if (cookies.token && cookies.token.length === 24) {
+    let access = true;
+    route_names.map(item => {
+        if (request.path.indexOf(item) !== -1 && access) {
+            access = false
+        }
+    })
+    if (access) {
         next();
     } else {
-        response.sendStatus(500);
-        response.end();
+        let cookies = request.headers;
+        if (cookies.token && cookies.token.length === 24) {
+            next();
+        } else {
+            response.sendStatus(500);
+            response.end();
+        }
     }
 });
 
@@ -95,6 +105,9 @@ app.use (function (request, response) {
             break;
         case '.jpg':
             contentType = 'image/jpg';
+            break;
+        case '.svg':
+            contentType = 'image/svg+xml';
             break;
         case '.wav':
             contentType = 'audio/wav';
