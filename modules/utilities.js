@@ -1,7 +1,7 @@
 const nodemailer = require ('nodemailer');
 
 const adminEmail = "startwillsi@gmail.com";
-const willsiEmail = "info@willsi.top";
+const willsiEmail = "vi290983mal@gmail.com";
 const password = "123Willsi!";
 const subjectTypes = {
     "afc": "Application for cooperation",
